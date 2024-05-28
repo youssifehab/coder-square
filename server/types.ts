@@ -14,7 +14,7 @@ export interface Post {
   title: string;
   url: string;
   userId: string;
-  postAt: number;
+  postedAt: number;
 }
 
 export interface Like {

@@ -32,7 +32,7 @@ export const createPostHandler: ExpressHandler<
   }
   const post: Post = {
     id: crypto.randomUUID(),
-    postAt: Date.now(),
+    postedAt: Date.now(),
     title: req.body.title,
     url: req.body.url,
     userId: req.body.userId,
