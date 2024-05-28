@@ -11,18 +11,22 @@ import crypto from "crypto";
 export const listPostsHandler: ExpressHandler<
   ListPostsRequest,
   ListPostsResponse
-> = (_req, res) => {
-  throw new Error("oops!");
-  res.send({ posts: db.listPosts() });
+> = async (_req, res) => {
+  try {
+    res.send({ posts: await db.listPosts() });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 export const createPostHandler: ExpressHandler<
   CreatePostRequest,
   CreatePostResponse
-> = (req, res) => {
-  if (!req.body.title) {
-    return res.status(400).send("Title Field is required, but missing.");
-  }
+> = async (req, res) => {
+  // TODO: Validate user exists
+  // TODO: Get user Id session
+  // TODO: Validate title and url are true
+  // TODO: Validate url is unique, otherwise +1 to existing post
   if (!req.body.title || !req.body.url || !req.body.userId) {
     return res.sendStatus(400);
   }
@@ -33,6 +37,6 @@ export const createPostHandler: ExpressHandler<
     url: req.body.url,
     userId: req.body.userId,
   };
-  db.createPost(post);
+  await db.createPost(post);
   res.sendStatus(200);
 };

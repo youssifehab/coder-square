@@ -1,5 +1,6 @@
 import express, { ErrorRequestHandler, RequestHandler } from "express";
 import { createPostHandler, listPostsHandler } from "./handlers/postHandlers";
+import asyncHandler from "express-async-handler";
 
 const app = express();
 
@@ -12,8 +13,8 @@ const requestLoggerMiddleware: RequestHandler = (req, _res, next) => {
 
 app.use(requestLoggerMiddleware);
 
-app.get("/v1/posts", listPostsHandler);
-app.post("/v1/posts", createPostHandler);
+app.get("/v1/posts", asyncHandler(listPostsHandler));
+app.post("/v1/posts", asyncHandler(createPostHandler));
 
 const errHandler: ErrorRequestHandler = (err, _req, res, next) => {
   console.error("Uncaought Exception: ", err);
