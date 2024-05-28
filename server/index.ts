@@ -1,4 +1,4 @@
-import express, { RequestHandler } from "express";
+import express, { ErrorRequestHandler, RequestHandler } from "express";
 import { createPostHandler, listPostsHandler } from "./handlers/postHandlers";
 
 const app = express();
@@ -12,8 +12,17 @@ const requestLoggerMiddleware: RequestHandler = (req, _res, next) => {
 
 app.use(requestLoggerMiddleware);
 
-app.get("/posts", listPostsHandler);
-app.post("/posts", createPostHandler);
+app.get("/v1/posts", listPostsHandler);
+app.post("/v1/posts", createPostHandler);
+
+const errHandler: ErrorRequestHandler = (err, _req, res, next) => {
+  console.error("Uncaought Exception: ", err);
+  return res
+    .status(500)
+    .send("Oops, uncaught exception occured, please try again.");
+  next();
+};
+app.use(errHandler);
 
 app.listen(8090, () => {
   console.log("listen to port 8090");

@@ -1,19 +1,28 @@
+import {
+  CreatePostRequest,
+  CreatePostResponse,
+  ListPostsRequest,
+  ListPostsResponse,
+} from "../api";
 import { db } from "../dataStore";
 import { ExpressHandler, Post } from "../types";
 import crypto from "crypto";
 
-export const listPostsHandler: ExpressHandler<{}, {}> = (_req, res) => {
+export const listPostsHandler: ExpressHandler<
+  ListPostsRequest,
+  ListPostsResponse
+> = (_req, res) => {
+  throw new Error("oops!");
   res.send({ posts: db.listPosts() });
 };
-
-type CreatePostRequest = Pick<Post, "title" | "url" | "userId">;
-
-interface CreatePostResponse {}
 
 export const createPostHandler: ExpressHandler<
   CreatePostRequest,
   CreatePostResponse
 > = (req, res) => {
+  if (!req.body.title) {
+    return res.status(400).send("Title Field is required, but missing.");
+  }
   if (!req.body.title || !req.body.url || !req.body.userId) {
     return res.sendStatus(400);
   }
