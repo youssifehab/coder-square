@@ -21,14 +21,25 @@ export class SqlDataStore implements DataStore {
     return this;
   }
 
-  createUser(_user: User): Promise<void> {
-    throw new Error("Method not implemented.");
+  async createUser(user: User): Promise<void> {
+    await this.db.run(
+      "INSERT INTO users (id, firstname, lastname, username, email, password) VALUES (?,?,?,?,?,?)",
+      user.id,
+      user.firstName,
+      user.lastName,
+      user.userName,
+      user.email,
+      user.password
+    );
   }
-  getUserByEmail(_email: string): Promise<User | undefined> {
-    throw new Error("Method not implemented.");
+  getUserByEmail(email: string): Promise<User | undefined> {
+    return this.db.get<User>(`SELECT * FROM users WHERE email = ?`, email);
   }
-  getUserByUserName(_username: string): Promise<User | undefined> {
-    throw new Error("Method not implemented.");
+  getUserByUserName(username: string): Promise<User | undefined> {
+    return this.db.get<User>(
+      `SELECT * FROM users WHERE username  = ?`,
+      username
+    );
   }
   createComment(_comment: Comment): Promise<void> {
     throw new Error("Method not implemented.");

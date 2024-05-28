@@ -2,6 +2,7 @@ import express, { ErrorRequestHandler, RequestHandler } from "express";
 import { createPostHandler, listPostsHandler } from "./handlers/postHandlers";
 import asyncHandler from "express-async-handler";
 import { initdb } from "./dataStore";
+import { signInHandler, signUpHandler } from "./handlers/userHandler";
 
 (async () => {
   await initdb();
@@ -18,6 +19,9 @@ import { initdb } from "./dataStore";
 
   app.get("/v1/posts", asyncHandler(listPostsHandler));
   app.post("/v1/posts", asyncHandler(createPostHandler));
+
+  app.post("/v1/signup", asyncHandler(signUpHandler));
+  app.post("/v1/signin", asyncHandler(signInHandler));
 
   const errHandler: ErrorRequestHandler = (err, _req, res, next) => {
     console.error("Uncaought Exception: ", err);
