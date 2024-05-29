@@ -25,9 +25,9 @@ export class SqlDataStore implements DataStore {
     await this.db.run(
       "INSERT INTO users (id, firstname, lastname, username, email, password) VALUES (?,?,?,?,?,?)",
       user.id,
-      user.firstName,
-      user.lastName,
-      user.userName,
+      user.firstname,
+      user.lastname,
+      user.username,
       user.email,
       user.password
     );
@@ -35,7 +35,7 @@ export class SqlDataStore implements DataStore {
   getUserByEmail(email: string): Promise<User | undefined> {
     return this.db.get<User>(`SELECT * FROM users WHERE email = ?`, email);
   }
-  getUserByUserName(username: string): Promise<User | undefined> {
+  getUserByusername(username: string): Promise<User | undefined> {
     return this.db.get<User>(
       `SELECT * FROM users WHERE username  = ?`,
       username

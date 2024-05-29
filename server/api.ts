@@ -20,7 +20,7 @@ export interface GetPostResponse {
 // User APIs
 export type SignUpRquest = Pick<
   User,
-  "firstName" | "lastName" | "userName" | "email" | "password"
+  "firstname" | "lastname" | "username" | "email" | "password"
 >;
 export interface SignUpResponse {}
 export interface SignInRequest {
@@ -29,5 +29,5 @@ export interface SignInRequest {
 }
 export type SignInResponse = Pick<
   User,
-  "firstName" | "lastName" | "userName" | "email" | "id"
+  "firstname" | "lastname" | "username" | "email" | "id"
 >;

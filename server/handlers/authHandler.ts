@@ -13,22 +13,22 @@ export const signUpHandler: ExpressHandler<
   SignUpRquest,
   SignUpResponse
 > = async (req, res) => {
-  const { email, firstName, lastName, password, userName } = req.body;
-  if (!email || !firstName || !lastName || !password || !userName) {
+  const { email, firstname, lastname, password, username } = req.body;
+  if (!email || !firstname || !lastname || !password || !username) {
     return res.status(400).send("All fields are required.");
   }
 
   const existing =
-    (await db.getUserByEmail(email)) || (await db.getUserByUserName(userName));
+    (await db.getUserByEmail(email)) || (await db.getUserByusername(username));
   if (existing) {
     return res.status(403).send("User already exist.");
   }
 
   const user: User = {
     id: crypto.randomUUID(),
-    firstName,
-    lastName,
-    userName,
+    firstname,
+    lastname,
+    username,
     email,
     password,
   };
@@ -45,15 +45,15 @@ export const signInHandler: ExpressHandler<
     return res.status(400);
   }
   const existing =
-    (await db.getUserByEmail(login)) || (await db.getUserByUserName(login));
+    (await db.getUserByEmail(login)) || (await db.getUserByusername(login));
   if (!existing || existing.password !== password) {
     return res.sendStatus(403);
   }
   return res.status(200).send({
     email: existing.email,
-    firstName: existing.firstName,
-    lastName: existing.lastName,
-    userName: existing.userName,
+    firstname: existing.firstname,
+    lastname: existing.lastname,
+    username: existing.username,
     id: existing.id,
   });
 };
