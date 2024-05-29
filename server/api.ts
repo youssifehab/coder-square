@@ -22,12 +22,14 @@ export type SignUpRquest = Pick<
   User,
   "firstname" | "lastname" | "username" | "email" | "password"
 >;
-export interface SignUpResponse {}
+export interface SignUpResponse {
+  jwt: string;
+}
 export interface SignInRequest {
   login: string; //username or email
   password: string;
 }
-export type SignInResponse = Pick<
-  User,
-  "firstname" | "lastname" | "username" | "email" | "id"
->;
+export type SignInResponse = {
+  user: Pick<User, "firstname" | "lastname" | "username" | "email" | "id">;
+  jwt: string;
+};

@@ -8,6 +8,7 @@ import {
 } from "../api";
 import { db } from "../dataStore";
 import { ExpressHandler, User } from "../types";
+import { signJwt } from "../auth";
 
 export const signUpHandler: ExpressHandler<
   SignUpRquest,
@@ -15,13 +16,13 @@ export const signUpHandler: ExpressHandler<
 > = async (req, res) => {
   const { email, firstname, lastname, password, username } = req.body;
   if (!email || !firstname || !lastname || !password || !username) {
-    return res.status(400).send("All fields are required.");
+    return res.status(400).send({ error: "All fields are required." });
   }
 
   const existing =
     (await db.getUserByEmail(email)) || (await db.getUserByusername(username));
   if (existing) {
-    return res.status(403).send("User already exist.");
+    return res.status(403).send({ error: "User already exist." });
   }
 
   const user: User = {
@@ -33,7 +34,8 @@ export const signUpHandler: ExpressHandler<
     password,
   };
   await db.createUser(user);
-  return res.sendStatus(200);
+  const jwt = signJwt({ userId: user.id });
+  return res.status(200).send({ jwt });
 };
 
 export const signInHandler: ExpressHandler<
@@ -49,11 +51,15 @@ export const signInHandler: ExpressHandler<
   if (!existing || existing.password !== password) {
     return res.sendStatus(403);
   }
+  const jwt = signJwt({ userId: existing.id });
   return res.status(200).send({
-    email: existing.email,
-    firstname: existing.firstname,
-    lastname: existing.lastname,
-    username: existing.username,
-    id: existing.id,
+    user: {
+      email: existing.email,
+      firstname: existing.firstname,
+      lastname: existing.lastname,
+      username: existing.username,
+      id: existing.id,
+    },
+    jwt,
   });
 };
