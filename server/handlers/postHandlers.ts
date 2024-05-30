@@ -27,7 +27,7 @@ export const createPostHandler: ExpressHandler<
   // TODO: Get user Id session
   // TODO: Validate title and url are true
   // TODO: Validate url is unique, otherwise +1 to existing post
-  if (!req.body.title || !req.body.url || !req.body.userId) {
+  if (!req.body.title || !req.body.url) {
     return res.sendStatus(400);
   }
   const post: Post = {
@@ -35,7 +35,7 @@ export const createPostHandler: ExpressHandler<
     postedAt: Date.now(),
     title: req.body.title,
     url: req.body.url,
-    userId: req.body.userId,
+    userId: res.locals.userId,
   };
   await db.createPost(post);
   res.sendStatus(200);
