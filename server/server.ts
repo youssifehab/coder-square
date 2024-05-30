@@ -19,6 +19,10 @@ import { authMiddleware } from "./middlewares/authMiddleware";
   app.use(requestLoggerMiddleware);
 
   // Public endpoints
+  app.get("/healthz", (_req, res) => {
+    res.send({ status: "Ok ✌️" });
+  });
+
   app.post("/v1/signup", asyncHandler(signUpHandler));
   app.post("/v1/signin", asyncHandler(signInHandler));
 
@@ -30,7 +34,7 @@ import { authMiddleware } from "./middlewares/authMiddleware";
 
   app.use(errHandler);
 
-  app.listen(8090, () => {
+  app.listen(process.env.PORT || 8090, () => {
     console.log("listen to port 8090");
   });
 })();
