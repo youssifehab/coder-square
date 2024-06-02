@@ -7,6 +7,7 @@ import { requestLoggerMiddleware } from "./middlewares/loggerMiddleware";
 import { errHandler } from "./middlewares/errorMiddleware";
 import dotenv from "dotenv";
 import { authMiddleware } from "./middlewares/authMiddleware";
+import cors from "cors";
 
 (async () => {
   await initdb();
@@ -15,6 +16,7 @@ import { authMiddleware } from "./middlewares/authMiddleware";
   const app = express();
 
   app.use(express.json());
+  app.use(cors());
 
   app.use(requestLoggerMiddleware);
 
@@ -26,10 +28,11 @@ import { authMiddleware } from "./middlewares/authMiddleware";
   app.post("/v1/signup", asyncHandler(signUpHandler));
   app.post("/v1/signin", asyncHandler(signInHandler));
 
+  app.get("/v1/posts", asyncHandler(listPostsHandler));
   app.use(authMiddleware);
 
   // Protected endpoints
-  app.get("/v1/posts", asyncHandler(listPostsHandler));
+
   app.post("/v1/posts", asyncHandler(createPostHandler));
 
   app.use(errHandler);
