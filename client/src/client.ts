@@ -10,8 +10,5 @@ export const listPosts = async (
     const { error } = await res.json();
     throw error;
   }
-  return res.json().then((response) => {
-    console.log(response.posts);
-    return response.posts;
-  });
+  return res.json();
 };

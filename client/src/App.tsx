@@ -1,23 +1,14 @@
-import { useQuery } from "react-query";
-import { ListPostsResponse } from "../../shared";
-import { listPosts } from "./client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ListPosts } from "./pages/list-posts";
+import { ViewPost } from "./pages/view-post";
 
 export const App = () => {
-  const { data, error, isLoading } = useQuery<ListPostsResponse>(
-    ["list-posts"],
-    listPosts
-  );
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    return <div>error in Loading posts</div>;
-  }
-
   return (
-    <div>
-      posts:
-      {<div>{JSON.stringify(data)}</div>}
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<ListPosts />} />
+        <Route path="/p/:id" element={<ViewPost />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
