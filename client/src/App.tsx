@@ -1,16 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { Post } from "../../shared";
+import { useQuery } from "react-query";
+import { ListPostsResponse } from "../../shared";
+import { listPosts } from "./client";
 
 export const App = () => {
-  const [posts, setPosts] = useState<Post[]>();
-  useEffect(() => {
-    fetch("http://localhost:8090/v1/posts").then((res) => {
-      res.json().then((response) => setPosts(response.posts));
-    });
-  }, []);
-  return (posts?.length || 0) > 0 ? (
-    <div>{JSON.stringify(posts)}</div>
-  ) : (
-    <div>no posts</div>
+  const { data, error, isLoading } = useQuery<ListPostsResponse>(
+    ["list-posts"],
+    listPosts
+  );
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>error in Loading posts</div>;
+  }
+
+  return (
+    <div>
+      posts:
+      {<div>{JSON.stringify(data)}</div>}
+    </div>
   );
 };
