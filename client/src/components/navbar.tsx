@@ -1,11 +1,13 @@
-import { Flex, Box, Button } from "@chakra-ui/react";
-
+import { Flex, Box, Button, Image } from "@chakra-ui/react";
+import logo from "../assets/logo.svg";
 export const NavBar = () => {
   return (
-    <Flex justify="space-between" m={4}>
-      <Box>Codersquare</Box>
+    <Flex justify="space-between" m={4} align="center">
+      <Box>
+        <Image src={logo} />
+      </Box>
       <Flex gap={2}>
-        <Button>Sign in</Button>
+        <Button variant="ghost">Sign in</Button>
         <Button>Sign up</Button>
       </Flex>
     </Flex>
